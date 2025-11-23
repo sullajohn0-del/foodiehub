@@ -1,0 +1,48 @@
+================================================================================
+                    ⚠️  IMPORTANT: READ THIS FIRST  ⚠️
+================================================================================
+
+You're getting the error because you're using the WRONG command!
+
+❌ DON'T USE THIS:
+   python manage.py makemigrations
+
+✅ USE THIS INSTEAD:
+   .\django.ps1 makemigrations
+
+================================================================================
+                         HOW TO RUN DJANGO COMMANDS
+================================================================================
+
+1. Open PowerShell in this folder:
+   cd C:\Users\sulla\OneDrive\Desktop\shop\myproject
+
+2. Use the wrapper script (NOT "python manage.py"):
+
+   .\django.ps1 makemigrations
+   .\django.ps1 migrate
+   .\django.ps1 runserver
+   .\django.ps1 createsuperuser
+
+================================================================================
+                          QUICK TEST
+================================================================================
+
+Run this to verify it works:
+
+   .\django.ps1 --version
+
+You should see: 5.2.8
+
+================================================================================
+                      WHY THIS HAPPENS
+================================================================================
+
+When you type "python manage.py", Windows uses your SYSTEM Python
+which doesn't have Django installed.
+
+The wrapper script (.\django.ps1) uses the CORRECT Python from the
+virtual environment which HAS Django installed.
+
+================================================================================
+

@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Restaurants - FoodieHub{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-gradient-to-r from-red-500 to-pink-500 text-white py-12">
+    <div class="container-custom">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">Saan ka kakain ngayon?</h1>
+        <p class="text-xl mb-8">Order authentic Filipino dishes from your favorite restaurants and get it delivered fast!</p>
+        
+        <!-- Search Bar -->
+        <form method="get" action="{% url 'home' %}" class="relative max-w-2xl">
+            <input
+                type="text"
+                name="search"
+                placeholder="Search restaurants or cuisines..."
+                value="{{ search_query }}"
+                class="w-full px-6 py-4 pr-12 rounded-full text-gray-800 text-lg focus:outline-none focus:ring-4 focus:ring-white/30 shadow-lg"
+            />
+            <button type="submit" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-500">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="bg-white border-b sticky top-16 z-10 shadow-sm">
+    <div class="container-custom py-4">
+        <form method="get" action="{% url 'home' %}" class="flex flex-wrap gap-4 items-center">
+            {% if search_query %}
+                <input type="hidden" name="search" value="{{ search_query }}">
+            {% endif %}
+            
+            <!-- Cuisine Filter -->
+            <div class="flex items-center gap-2">
+                <label class="text-sm font-medium text-gray-700">Cuisine:</label>
+                <select
+                    name="cuisine"
+                    onchange="this.form.submit()"
+                    class="border rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                    <option value="">All Cuisines</option>
+                    {% for cuisine in cuisines %}
+                        <option value="{{ cuisine }}" {% if cuisine_filter == cuisine %}selected{% endif %}>
+                            {{ cuisine }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Sort Filter -->
+            <div class="flex items-center gap-2">
+                <label class="text-sm font-medium text-gray-700">Sort by:</label>
+                <select
+                    name="sort"
+                    onchange="this.form.submit()"
+                    class="border rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                    <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Rating</option>
+                    <option value="delivery_time" {% if sort_by == 'delivery_time' %}selected{% endif %}>Delivery Time</option>
+                    <option value="delivery_fee" {% if sort_by == 'delivery_fee' %}selected{% endif %}>Delivery Fee</option>
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Restaurant Listings -->
+<div class="container-custom py-8">
+    {% if restaurants %}
+        <h2 class="text-2xl font-bold mb-6">Restaurants ({{ restaurants.count }})</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for restaurant in restaurants %}
+                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all cursor-pointer overflow-hidden border border-gray-100">
+                    <a href="{% url 'restaurant_detail' restaurant.slug %}">
+                        <!-- Restaurant Image -->
+                        <div class="relative h-48 overflow-hidden">
+                            {% if restaurant.image %}
+                                <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                            {% elif restaurant.image_url %}
+                                <img src="{{ restaurant.image_url }}" alt="{{ restaurant.name }}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                            {% else %}
+                                <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-4xl">🍽️</div>
+                            {% endif %}
+                            {% if restaurant.is_promoted and restaurant.discount_text %}
+                                <div class="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                                    {{ restaurant.discount_text }}
+                                </div>
+                            {% endif %}
+                            <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur text-white px-3 py-1 rounded-full text-sm font-medium">
+                                {{ restaurant.delivery_time }}
+                            </div>
+                        </div>
+
+                        <!-- Restaurant Info -->
+                        <div class="p-5">
+                            <h3 class="text-xl font-bold mb-2 text-gray-800">{{ restaurant.name }}</h3>
+                            <p class="text-gray-600 text-sm mb-3">{{ restaurant.cuisine_type }}</p>
+                            
+                            <div class="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                                <div class="flex items-center gap-1">
+                                    <span class="text-yellow-500">★</span>
+                                    <span class="font-semibold">{{ restaurant.rating }}</span>
+                                    <span class="text-gray-400">({{ restaurant.review_count }})</span>
+                                </div>
+                                <span>•</span>
+                                <span>₱{{ restaurant.delivery_fee }} delivery</span>
+                                {% if restaurant.min_order > 0 %}
+                                    <span>•</span>
+                                    <span>Min. ₱{{ restaurant.min_order }}</span>
+                                {% endif %}
+                            </div>
+
+                            <p class="text-gray-500 text-sm line-clamp-2">{{ restaurant.description }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-12">
+            <div class="text-6xl mb-4">🔍</div>
+            <p class="text-xl text-gray-600">No restaurants found</p>
+            <p class="text-gray-500 mt-2">Try adjusting your search or filters</p>
+            <a href="{% url 'home' %}" class="inline-block mt-4 text-red-500 hover:underline">Clear filters</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

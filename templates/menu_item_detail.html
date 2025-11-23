@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ menu_item.name }} - {{ restaurant.name }}{% endblock %}
+
+{% block content %}
+<div class="container-custom py-8">
+    <a href="{% url 'restaurant_detail' restaurant.slug %}" class="text-gray-600 hover:text-red-500 mb-4 inline-flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Back to {{ restaurant.name }}
+    </a>
+
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
+            <div class="relative h-64 md:h-full min-h-[400px]">
+                {% if menu_item.image %}
+                    <img src="{{ menu_item.image.url }}" alt="{{ menu_item.name }}" class="w-full h-full object-cover">
+                {% elif menu_item.image_url %}
+                    <img src="{{ menu_item.image_url }}" alt="{{ menu_item.name }}" class="w-full h-full object-cover">
+                {% else %}
+                    <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-6xl">🍴</div>
+                {% endif %}
+            </div>
+            <div class="p-6 md:p-8 space-y-6">
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-sm font-medium bg-red-100 text-red-600 px-3 py-1 rounded-full">
+                            {{ restaurant.name }}
+                        </span>
+                        <div class="flex items-center gap-1">
+                            <span class="text-yellow-400">★</span>
+                            <span class="text-sm font-medium">{{ restaurant.rating }}</span>
+                        </div>
+                        <span class="text-sm text-gray-400">•</span>
+                        <span class="text-sm text-gray-600">{{ restaurant.delivery_time }}</span>
+                    </div>
+                    <h1 class="text-3xl font-bold mb-3">{{ menu_item.name }}</h1>
+                    <p class="text-gray-600 text-base leading-relaxed">{{ menu_item.description }}</p>
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+                    {% if menu_item.is_vegetarian %}
+                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs">Vegetarian</span>
+                    {% endif %}
+                    {% if menu_item.is_spicy %}
+                        <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs">Spicy</span>
+                    {% endif %}
+                    {% if menu_item.calories %}
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs">🔥 {{ menu_item.calories }} cal</span>
+                    {% endif %}
+                    {% if menu_item.prep_time %}
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs">⏱️ {{ menu_item.prep_time }}</span>
+                    {% endif %}
+                </div>
+
+                {% if menu_item.variants.all %}
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-700 mb-3">Available Sizes</h3>
+                        <div class="flex flex-wrap gap-3">
+                            {% for variant in menu_item.variants.all %}
+                                <div class="px-4 py-2 rounded-lg border-2 border-gray-200">
+                                    <div class="font-semibold">{{ variant.name }}</div>
+                                    <div class="text-red-500">₱{{ variant.price }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="pt-4">
+                    <div class="text-3xl font-bold mb-6">₱{{ menu_item.price }}</div>
+                    <button class="w-full bg-red-500 text-white px-6 py-4 rounded-lg font-semibold text-lg hover:bg-red-600 transition">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

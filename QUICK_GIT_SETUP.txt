@@ -1,0 +1,39 @@
+================================================================================
+                    ⚡ QUICK GIT SETUP - DO THIS NOW
+================================================================================
+
+Git needs your name and email before you can commit.
+
+OPTION 1: Run the configuration script (Easiest)
+--------------------------------------------------
+Run this command:
+
+    $env:Path += ";C:\Program Files\Git\bin"
+    .\configure_git.ps1
+
+It will ask for your name and email, then configure Git.
+
+OPTION 2: Configure manually
+-----------------------------
+Run these commands (replace with your info):
+
+    $env:Path += ";C:\Program Files\Git\bin"
+    git config --global user.name "Your Name"
+    git config --global user.email "your.email@example.com"
+
+THEN commit:
+
+    git commit -m "FoodieHub ready for deployment"
+
+================================================================================
+                        AFTER CONFIGURING
+================================================================================
+
+Once Git is configured and you've committed, continue with:
+
+1. Create GitHub repository (see DEPLOYMENT_CHECKLIST_SIMPLE.md)
+2. Push to GitHub
+3. Deploy to Render
+
+================================================================================
+

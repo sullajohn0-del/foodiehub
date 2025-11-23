@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FoodieHub - Filipino Food Delivery{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .container-custom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white border-b sticky top-0 z-20 shadow-sm">
+        <div class="container-custom">
+            <div class="flex items-center justify-between h-16">
+                <a href="{% url 'home' %}" class="flex items-center gap-2">
+                    <span class="text-3xl">🍜</span>
+                    <span class="font-bold text-2xl text-red-500">FoodieHub</span>
+                </a>
+                
+                <nav class="flex items-center gap-6">
+                    <a href="{% url 'home' %}" class="font-medium text-gray-600 hover:text-red-500 transition">
+                        Restaurants
+                    </a>
+                    <a href="{% url 'admin:index' %}" class="text-gray-600 hover:text-red-500 text-sm">
+                        Admin
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-12">
+        <div class="container-custom py-8">
+            <div class="text-center text-sm text-gray-600">
+                © {% now "Y" %} FoodieHub. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+
