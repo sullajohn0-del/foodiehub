@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -77,9 +78,14 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# Use PostgreSQL in production (via environment variables), SQLite for development
-if os.environ.get('DB_NAME'):
-    # Production: PostgreSQL
+# Database configuration
+if os.environ.get('DATABASE_URL'):
+    # Production: Use DATABASE_URL (Render, Heroku, etc.)
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    }
+elif os.environ.get('DB_NAME'):
+    # Production: PostgreSQL via individual env vars
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
