@@ -3,34 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}FoodieHub - Filipino Food Delivery{% endblock %}</title>
+    <title>{% block title %}FoodieHub - Authentic Filipino Food Delivery{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        filipino: {
+                            red: '#ce1126',
+                            blue: '#0038a8',
+                            yellow: '#fcd116'
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         .container-custom {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 1rem;
         }
+        .gradient-filipino {
+            background: linear-gradient(135deg, #ce1126 0%, #0038a8 50%, #fcd116 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 font-sans">
     <!-- Header -->
-    <header class="bg-white border-b sticky top-0 z-20 shadow-sm">
+    <header class="bg-white border-b-2 border-filipino-red sticky top-0 z-20 shadow-lg">
         <div class="container-custom">
             <div class="flex items-center justify-between h-16">
-                <a href="{% url 'home' %}" class="flex items-center gap-2">
-                    <span class="text-3xl">🍜</span>
-                    <span class="font-bold text-2xl text-red-500">FoodieHub</span>
+                <a href="{% url 'home' %}" class="flex items-center gap-3">
+                    <span class="text-3xl">🇵🇭</span>
+                    <span class="font-bold text-2xl gradient-filipino bg-clip-text text-transparent">FoodieHub</span>
+                    <span class="hidden sm:block text-sm text-gray-600 font-medium">Authentic Filipino</span>
                 </a>
                 
                 <nav class="flex items-center gap-6">
-                    <a href="{% url 'home' %}" class="font-medium text-gray-600 hover:text-red-500 transition">
+                    <a href="{% url 'home' %}" class="font-medium text-gray-600 hover:text-filipino-red transition-colors">
                         Restaurants
                     </a>
-                    <a href="{% url 'admin:index' %}" class="text-gray-600 hover:text-red-500 text-sm">
+                    <a href="{% url 'admin:index' %}" class="text-gray-600 hover:text-filipino-red text-sm transition-colors">
                         Admin
                     </a>
+                    <button class="bg-gradient-to-r from-filipino-red to-filipino-blue text-white px-4 py-2 rounded-full hover:shadow-lg transition-all font-medium text-sm">
+                        🛒 Cart (0)
+                    </button>
                 </nav>
             </div>
         </div>
@@ -42,10 +75,34 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-white border-t mt-12">
-        <div class="container-custom py-8">
-            <div class="text-center text-sm text-gray-600">
-                © {% now "Y" %} FoodieHub. All rights reserved.
+    <footer class="bg-gray-900 text-white mt-16">
+        <div class="container-custom py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        🇵🇭 <span class="gradient-filipino bg-clip-text text-transparent">FoodieHub</span>
+                    </h3>
+                    <p class="text-gray-300 mb-4">Bringing authentic Filipino flavors to your doorstep. From Luzon to Mindanao!</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4 text-filipino-yellow">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-filipino-yellow transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-filipino-yellow transition-colors">Filipino Cuisine</a></li>
+                        <li><a href="#" class="hover:text-filipino-yellow transition-colors">Help Center</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4 text-filipino-yellow">Contact</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>📞 +63 917 FOODIE</li>
+                        <li>📧 kumain@foodiehub.ph</li>
+                        <li>📍 Metro Manila, PH</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">© {% now "Y" %} FoodieHub Philippines. Masarap na pagkain, mabilis na delivery! 🇵🇭</p>
             </div>
         </div>
     </footer>
